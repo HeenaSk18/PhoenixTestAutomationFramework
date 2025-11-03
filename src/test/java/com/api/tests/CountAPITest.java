@@ -3,10 +3,11 @@ package com.api.tests;
 import static org.hamcrest.Matchers.*;
 import  org.testng.annotations.Test;
 
-import static com.api.constant.Role.*;
-import static com.utils.AuthTokenPovider.*;
-import static com.utils.ConfigManager.*;
+import com.api.utils.SpecUtil;
 
+import static com.api.constant.Role.*;
+import static com.api.utils.AuthTokenPovider.*;
+import static com.api.utils.ConfigManager.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 import org.testng.annotations.Test;
@@ -21,17 +22,19 @@ public class CountAPITest {
 	
 	public void verifyCountAPIResponse() {
 		given()
-		.baseUri(getProperty("BASE_URI"))
-		.and()
-		.header("Authorization",getToken(FD))
-		.log().uri()
-		.log().method()
-		.log().headers()
+//		.baseUri(getProperty("BASE_URI"))
+//		.and()
+//		.header("Authorization",getToken(FD))
+//		.log().uri()
+//		.log().method()
+//		.log().headers()
+		.spec(SpecUtil.requestSpecWithAuth(FD))
 		.when()
 		.get("/dashboard/count")
 		.then()
-		.log().all()
-		.statusCode(200)
+//		.log().all()
+//		.statusCode(200)
+		.spec(SpecUtil.responseSpec_OK())
 		.body("message",equalTo("Success"))
 		.time(lessThan(1000L))
 		.body("data",notNullValue())
@@ -47,16 +50,16 @@ public class CountAPITest {
 	@Test
 	public void countAPITest_MissingAuthToken() {
 		given()
-		.baseUri(getProperty("BASE_URI"))
-		.and()
-		.log().uri()
-		.log().method()
-		.log().headers()
+//		.baseUri(getProperty("BASE_URI"))
+//		.and()
+//		.log().uri()
+//		.log().method()
+//		.log().headers()
+		.spec(SpecUtil.requestSpec())
 		.when()
 		.get("/dashboard/count")
 		.then()
-		.log().all()
-		.statusCode(401);
+		.spec(SpecUtil.responseSpec_TEXT(401));
 	}
 	
 }
