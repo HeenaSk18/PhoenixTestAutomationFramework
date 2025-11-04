@@ -11,6 +11,6 @@ public class DateTimeUtil {
 	}
 	
 	public static String getTimeWithDaysAgo(int days) {
-	    return Instant.now().minus((long) days).toString();
+	    return Instant.now().minus(days).toString();
 	}
 }

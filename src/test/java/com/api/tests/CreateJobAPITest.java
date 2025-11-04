@@ -12,7 +12,14 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
+import com.api.constant.Model;
+import com.api.constant.OEM;
+import com.api.constant.Platform;
+import com.api.constant.Problem;
+import com.api.constant.Product;
 import com.api.constant.Role;
+import com.api.constant.ServiceLocation;
+import com.api.constant.Warranty_Status;
 import com.api.request.model.CreateJobPayload;
 import com.api.request.model.Customer;
 import com.api.request.model.CustomerAddress;
@@ -20,6 +27,7 @@ import com.api.request.model.CustomerProduct;
 import com.api.request.model.Problems;
 import static com.api.utils.DateTimeUtil.*;
 import com.api.utils.SpecUtil;
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 
 public class CreateJobAPITest {
 //Creating the CreateJobPayload Object
@@ -33,12 +41,14 @@ public class CreateJobAPITest {
 		//System.out.println(customer.first_name());
 		
 		CustomerAddress customerAddress = new CustomerAddress("C 106 ", "Premier Road", "Kohinnor City", "Phoenix Mall", "Mumbai", "411011", "India", "Maharashtra");
-		CustomerProduct customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "12363111112105", "12363111112105", "12363111112105", getTimeWithDaysAgo(10), 1,1);
-		Problems problems = new Problems(1,"Battery Issue");
+		CustomerProduct customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "12363731112105", "12363731112105", "12363731112105", getTimeWithDaysAgo(10), 
+				Product.NEXUS_2.getCode(),
+				Model.NEXUS_2_BLUE.getCode());
+		Problems problems = new Problems(Problem.SMARTPHONE_IS_RUNNING_SLOW.getCode(),"Battery Issue");
 		List<Problems> problemList = new ArrayList<Problems>();
 		problemList.add(problems);
 		
-		CreateJobPayload createjobpayload = new CreateJobPayload(0, 2, 1, 1, customer, customerAddress, customerProduct, problemList);
+		CreateJobPayload createjobpayload = new CreateJobPayload(ServiceLocation.SERVICE_LOCATION_A.getCode(), Platform.FRONT_DEST.getCode(), Warranty_Status.IN_WARRANTY.getCode(), OEM.GOOGLE.getCode(), customer, customerAddress, customerProduct, problemList);
 		
 		
 		
