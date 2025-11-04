@@ -1,23 +1,29 @@
 package com.api.tests;
 
-import static com.api.utils.ConfigManager.*;
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.lessThan;
 
 import java.io.IOException;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.api.pojo.UserCredentials;
-import com.api.utils.SpecUtil;
-
-import io.restassured.http.ContentType;
-import static io.restassured.module.jsv.JsonSchemaValidator.*;
+import com.api.request.model.UserCredentials;
+import static com.api.utils.SpecUtil.*;
 
 public class LoginAPITest {
 
-	@Test
+	private UserCredentials userCredentials; 
+	
+	@BeforeMethod(description = "Create the Payload for the Login API")
+	public void setup() {
+		 userCredentials = new UserCredentials("iamfd", "password");
+
+	}
+	
+	
+	@Test(description = "Verifying if login api is working for FD user", groups= {"api","regression","smoke"})
 	public void loginAPITest() throws IOException {
 		//Rest Assured Code!
 		
@@ -31,7 +37,7 @@ public class LoginAPITest {
 		
 		
 		
-		UserCredentials userCredentials = new UserCredentials("iamfd", "password");
+		//UserCredentials userCredentials = new UserCredentials("iamfd", "password");
 		
 	given()
 		//.baseUri("http://64.227.160.186:9000/v1")
@@ -49,11 +55,11 @@ public class LoginAPITest {
 //	.log().method()
 //	.log().headers()
 //	.log().body()
-	.spec(SpecUtil.requestSpec(userCredentials))
+	.spec(requestSpec(userCredentials))
 	.when()
 	.post("login")
 	.then()
-	.spec(SpecUtil.responseSpec_OK())
+	.spec(responseSpec_OK())
 //	.log().all()
 //	.statusCode(200)
 //	.time(lessThan(1000L))
