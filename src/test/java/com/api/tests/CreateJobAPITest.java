@@ -5,6 +5,8 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,7 @@ import com.api.request.model.Customer;
 import com.api.request.model.CustomerAddress;
 import com.api.request.model.CustomerProduct;
 import com.api.request.model.Problems;
+import static com.api.utils.DateTimeUtil.*;
 import com.api.utils.SpecUtil;
 
 public class CreateJobAPITest {
@@ -30,7 +33,7 @@ public class CreateJobAPITest {
 		//System.out.println(customer.first_name());
 		
 		CustomerAddress customerAddress = new CustomerAddress("C 106 ", "Premier Road", "Kohinnor City", "Phoenix Mall", "Mumbai", "411011", "India", "Maharashtra");
-		CustomerProduct customerProduct = new CustomerProduct("2025-04-06T18:30:00.000Z", "12343510352105", "12343510352105", "12343510352105", "2025-04-06T18:30:00.000Z", 1,1);
+		CustomerProduct customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "12363111112105", "12363111112105", "12363111112105", getTimeWithDaysAgo(10), 1,1);
 		Problems problems = new Problems(1,"Battery Issue");
 		List<Problems> problemList = new ArrayList<Problems>();
 		problemList.add(problems);
