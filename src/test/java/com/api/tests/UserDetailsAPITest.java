@@ -1,29 +1,20 @@
 package com.api.tests;
 
 
+import static com.api.constant.Role.FD;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.lessThan;
 
 import java.io.IOException;
-import java.security.AuthProvider;
 
 import org.testng.annotations.Test;
 
-import com.api.utils.SpecUtil;
+import static com.api.utils.SpecUtil.*;
 
-import static com.api.constant.Role.*;
-import static com.api.utils.AuthTokenPovider.*;
-import static com.api.utils.ConfigManager.*;
-
-import io.restassured.http.ContentType;
-import io.restassured.http.Header;
-import io.restassured.module.jsv.JsonSchemaValidator;
-import io.restassured.specification.ResponseSpecification;
+import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 public class UserDetailsAPITest {
 
-	@Test
-	
+	@Test(description ="Verify if the Userdetails API response is shown correctly", groups= {"api","smoke","regression"})
 	public void userDetailsAPITest() throws IOException {
 		
 	//	ConfigManager configManager = new ConfigManager();
@@ -37,16 +28,16 @@ public class UserDetailsAPITest {
 //				.log().uri()
 //				.log().method()
 //				.log().body()
-				.spec(SpecUtil.requestSpecWithAuth(FD))
+				.spec(requestSpecWithAuth(FD))
 				.when()
 				.get("userdetails")
 				.then()
 //				.log().all()
 //				.statusCode(200)
 //				.time(lessThan(1000L))
-				.spec(SpecUtil.responseSpec())
+				.spec(responseSpec())
 				.and()
-				.body(JsonSchemaValidator.matchesJsonSchemaInClasspath("response-schema/UserDetailResponseSchema.json"));
+				.body(matchesJsonSchemaInClasspath("response-schema/UserDetailResponseSchema.json"));
 				
 				
 	}
