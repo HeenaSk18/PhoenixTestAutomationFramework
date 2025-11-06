@@ -55,7 +55,7 @@ public class FackerDemo2 {
 		
 		//I want to generate a random number between 1 to 27
 		Random random = new Random();
-		int problemId=random.nextInt(26)+1;
+		int problemId=random.nextInt(25)+1;
 	
 	Problems problems = new Problems(problemId, fakeRemark);
 	System.out.println(problems);
