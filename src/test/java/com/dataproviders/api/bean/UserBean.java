@@ -3,26 +3,21 @@ package com.dataproviders.api.bean;
 import com.opencsv.bean.CsvBindByName;
 
 public class UserBean {
-	@CsvBindByName (column="username")
+	@CsvBindByName(column = "username")
 	private String username;
-	@CsvBindByName (column="password")
-	private String password;
-	
-	public UserBean() {
-		
-	}
+	@CsvBindByName(column = "password")
 
-	public UserBean(String username, String password) {
-		super();
-		this.username = username;
-		this.password = password;
+	private String password;
+
+	public UserBean() {
+
 	}
 
 	public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
+	public void setUserName(String username) {
 		this.username = username;
 	}
 
