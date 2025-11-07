@@ -66,7 +66,7 @@ public class DataProviderUtils {
 	
 	@DataProvider(name = "LoginAPIExcelDataProvider", parallel = true)
 	public static Iterator<UserCredentials> LoginAPIExcelDataProvider() {
-		return ExcelReaderUtil2.loadTestData();
+		return ExcelReaderUtil2.loadTestData("testData/PhoenixTestData.xlsx","LoginTestData",UserCredentials.class);
 	}
 	
 	

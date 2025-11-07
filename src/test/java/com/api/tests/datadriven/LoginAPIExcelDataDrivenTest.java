@@ -9,17 +9,13 @@ import static org.hamcrest.Matchers.equalTo;
 import org.testng.annotations.Test;
 
 import com.api.request.model.UserCredentials;
-import com.dataproviders.api.bean.UserBean;
 
 public class LoginAPIExcelDataDrivenTest {
 
-
-
-	
 	@Test(description = "Verifying if login api is working for FD user",
 			groups ={"api", "regression", "datadriven"} ,
 			dataProviderClass = com.dataproviders.DataProviderUtils.class,			
-			dataProvider = "LoginAPIExcelDataProvider"
+			dataProvider = "LoginAPIJsonDataProvider"
 			)
 	public void loginAPITest(UserCredentials userCredentials)  {
 
