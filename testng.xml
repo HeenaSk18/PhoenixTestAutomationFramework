@@ -4,12 +4,13 @@
 <suite name="Phoneix API Test Suite" verbose="1">
 	<test name="Inwarranty Flow Test">
 		<classes>
-			<class name="com.api.tests.LoginAPITest" />
-			<class name="com.api.tests.UserDetailsAPITest" />
-			<class name="com.api.tests.CountAPITest" />
-			<class name="com.api.tests.MasterAPITest" />
-			<class name="com.api.tests.CreateJobAPITest" />
+			<class name="com.api.tests.LoginAPIDataDrivenTest" />
+			<class name="com.api.tests.CreateJobAPITestDataDrivenTest" />
+			<class name="com.api.tests.CreateJobAPIFakeDataDrivenTest" />
 			<class name="com.api.tests.LoginAPIJSONDataDrivenTest" />
+			<class name="com.api.tests.CreateJobAPIJsonDataDrivenTest" />
+			<class name="com.api.tests.LoginAPIExcelDataDrivenTest" />
+			<class name="com.api.tests.CreateJobAPIExcelDataDrivenTest" />
 
 		</classes>
 	</test>
