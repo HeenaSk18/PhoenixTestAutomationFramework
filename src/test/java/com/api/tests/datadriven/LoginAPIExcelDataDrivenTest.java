@@ -12,22 +12,14 @@ import com.api.request.model.UserCredentials;
 
 public class LoginAPIExcelDataDrivenTest {
 
-	@Test(description = "Verifying if login api is working for FD user",
-			groups ={"api", "regression", "datadriven"} ,
-			dataProviderClass = com.dataproviders.DataProviderUtils.class,			
-			dataProvider = "LoginAPIJsonDataProvider"
-			)
-	public void loginAPITest(UserCredentials userCredentials)  {
+	@Test(description = "Verifying if login api is working for FD user", groups = { "api", "regression",
+			"datadriven" }, dataProviderClass = com.dataproviders.DataProviderUtils.class, 
+			dataProvider = "LoginAPIJsonDataProvider")
+	public void loginAPITest(UserCredentials userCredentials) {
 
-
-		given()
-		.spec(requestSpec(userCredentials))
-		.when()
-		.post("login")
-		.then().spec(responseSpec_OK())
-		.body("message", equalTo("Success"))
-		.and()
-		.body(matchesJsonSchemaInClasspath("response-schema/LoginResponseSchema.json"));
+		given().spec(requestSpec(userCredentials)).when().post("login").then().spec(responseSpec_OK())
+				.body("message", equalTo("Success")).and()
+				.body(matchesJsonSchemaInClasspath("response-schema/LoginResponseSchema.json"));
 
 	}
 
