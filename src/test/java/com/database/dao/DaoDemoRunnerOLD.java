@@ -7,7 +7,7 @@ import com.api.request.model.CreateJobPayload;
 import com.api.utils.CreateJobBeanMapper;
 import com.dataproviders.api.bean.CreateJobBean;
 
-public class DaoDemoRunner {
+public class DaoDemoRunnerOLD {
 	public static void main(String[] args) {
 		List<CreateJobBean> beanList = CreateJobPayloadDataDao.getCreateJobPayLoadData();
 		List<CreateJobPayload> payloadList = new ArrayList<CreateJobPayload>();
