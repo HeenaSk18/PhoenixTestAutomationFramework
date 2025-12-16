@@ -39,14 +39,14 @@ public class CreateJobAPITest {
 				//System.out.println(customer.first_name());
 				
 				CustomerAddress customerAddress = new CustomerAddress("C 106 ", "Premier Road", "Kohinnor City", "Phoenix Mall", "Mumbai", "411011", "India", "Maharashtra");
-				CustomerProduct customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "12363731112105", "12363731112105", "12363731112105", getTimeWithDaysAgo(10), 
+				CustomerProduct customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "12363731112139", "12363731112139", "12363731112139", getTimeWithDaysAgo(10), 
 						Product.NEXUS_2.getCode(),
 						Model.NEXUS_2_BLUE.getCode());
 				Problems problems = new Problems(Problem.SMARTPHONE_IS_RUNNING_SLOW.getCode(),"Battery Issue");
 				List<Problems> problemList = new ArrayList<Problems>();
 				problemList.add(problems);
 				
-				createjobpayload = new CreateJobPayload(ServiceLocation.SERVICE_LOCATION_A.getCode(), Platform.FRONT_DEST.getCode(), Warranty_Status.IN_WARRANTY.getCode(), OEM.GOOGLE.getCode(), customer, customerAddress, customerProduct, problemList);
+				createjobpayload = new CreateJobPayload(ServiceLocation.SERVICE_LOCATION_A.getCode(), Platform.FRONT_DESK.getCode(), Warranty_Status.IN_WARRANTY.getCode(), OEM.GOOGLE.getCode(), customer, customerAddress, customerProduct, problemList);
 				
 	}
 	
@@ -70,7 +70,7 @@ public class CreateJobAPITest {
 		.when()
 		.post("/job/create")
 		.then()
-		.statusCode(200)
+		//.statusCode(200)
 		.spec(responseSpec_OK())
 		.body(matchesJsonSchemaInClasspath("response-schema/CreateJobAPIResponseSchema.json"))
 		.body("message",equalTo("Job created successfully. "))
