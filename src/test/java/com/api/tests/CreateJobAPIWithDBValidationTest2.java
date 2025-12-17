@@ -1,0 +1,130 @@
+package com.api.tests;
+
+import static com.api.utils.DateTimeUtil.getTimeWithDaysAgo;
+import static com.api.utils.SpecUtil.requestSpecWithAuth;
+import static com.api.utils.SpecUtil.responseSpec_OK;
+import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.startsWith;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.api.constant.Model;
+import com.api.constant.OEM;
+import com.api.constant.Platform;
+import com.api.constant.Problem;
+import com.api.constant.Product;
+import com.api.constant.Role;
+import com.api.constant.ServiceLocation;
+import com.api.constant.Warranty_Status;
+import com.api.request.model.CreateJobPayload;
+import com.api.request.model.Customer;
+import com.api.request.model.CustomerAddress;
+import com.api.request.model.CustomerProduct;
+import com.api.request.model.Problems;
+import com.api.response.model.CreateJobResponseModel;
+import com.database.dao.CustomerAddressDao;
+import com.database.dao.CustomerDao;
+import com.database.dao.CustomerProductDao;
+import com.database.model.CustomerAddressDBModel;
+import com.database.model.CustomerDBModel;
+import com.database.model.CustomerProductDBModel;
+
+import io.restassured.response.Response;
+import io.restassured.response.Validatable;
+import io.restassured.response.ValidatableResponse;
+
+public class CreateJobAPIWithDBValidationTest2 {
+//Creating the CreateJobPayload Object
+	private Customer customer;
+	private CreateJobPayload createjobpayload;
+	private CustomerAddress customerAddress;
+	private CustomerProduct customerProduct;
+
+	@BeforeMethod(description = "Creating createjob api request payload")
+	public void setup() {
+		// Creating the CreateJobPayload Object
+		customer = new Customer("Heena", "Shaikh", "9899898975", "", "heenashaikh1811@gmail.com", "");
+
+		// System.out.println(customer.first_name());
+
+		customerAddress = new CustomerAddress("C 106 ", "Premier Road", "Kohinnor City", "Phoenix Mall", "Mumbai",
+				"411011", "India", "Maharashtra");
+		customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "12363731599779",
+				"12363731599779", "12363731599779", getTimeWithDaysAgo(10), Product.NEXUS_2.getCode(),
+				Model.NEXUS_2_BLUE.getCode());
+		Problems problems = new Problems(Problem.SMARTPHONE_IS_RUNNING_SLOW.getCode(), "Battery Issue");
+		List<Problems> problemList = new ArrayList<Problems>();
+		problemList.add(problems);
+
+		createjobpayload = new CreateJobPayload(ServiceLocation.SERVICE_LOCATION_A.getCode(),
+				Platform.FRONT_DESK.getCode(), Warranty_Status.IN_WARRANTY.getCode(), OEM.GOOGLE.getCode(), customer,
+				customerAddress, customerProduct, problemList);
+
+	}
+
+	@Test(description = "Verify if the create job API is able to create Inwarranty job", groups = { "api", "smoke",
+			"regression" })
+
+	public void createJobAPITest() {
+
+		CreateJobResponseModel createJobResponseModel = given().spec(requestSpecWithAuth(Role.FD, createjobpayload))
+//		.baseUri(ConfigManager.getProperty("BASE_URI"))
+//		.and()
+//		.header("Authorization", AuthTokenPovider.getToken(Role.FD))
+//		.contentType(ContentType.JSON)
+//		.body(createjobpayload)
+//		.log().all()
+				.when().post("/job/create").then()
+				//.statusCode(200)
+				.spec(responseSpec_OK())
+				.body(matchesJsonSchemaInClasspath("response-schema/CreateJobAPIResponseSchema.json"))
+				.body("message", equalTo("Job created successfully. ")).body("data.mst_service_location_id", equalTo(1))
+				.body("data.job_number", startsWith("JOB_"))
+				.extract().as(CreateJobResponseModel.class);
+		System.out.println("-----------------");
+		System.out.println();
+		int customerId= createJobResponseModel.getData().getTr_customer_id();
+
+		CustomerDBModel cutomerDataFromDB = CustomerDao.getCustomerInfo(customerId);
+		System.out.println(cutomerDataFromDB);
+
+		Assert.assertEquals(customer.first_name(), cutomerDataFromDB.getFirst_name());
+		Assert.assertEquals(customer.last_name(), cutomerDataFromDB.getLast_name());
+		Assert.assertEquals(customer.mobile_number(), cutomerDataFromDB.getMobile_number());
+		Assert.assertEquals(customer.mobile_number_alt(), cutomerDataFromDB.getMobile_number_alt());
+		Assert.assertEquals(customer.email_id(), cutomerDataFromDB.getEmail_id());
+		Assert.assertEquals(customer.email_id_alt(), cutomerDataFromDB.getEmail_id_alt());
+		System.out.println("-----------------");
+
+		System.out.println();
+		CustomerAddressDBModel customerAddressFromDB = CustomerAddressDao
+				.getCustomerAddressData(cutomerDataFromDB.getTr_customer_address_id());
+
+		Assert.assertEquals(customerAddressFromDB.getFlat_number(),customerAddress.flat_number() );
+		Assert.assertEquals(customerAddressFromDB.getApartment_name(),customerAddress.apartment_name() );
+		Assert.assertEquals(customerAddressFromDB.getLandmark(),customerAddress.landmark());
+		Assert.assertEquals(customerAddressFromDB.getState(),customerAddress.state());
+		Assert.assertEquals(customerAddressFromDB.getStreet_name(),customerAddress.street_name() );
+		Assert.assertEquals(customerAddressFromDB.getCountry(),customerAddress.country());
+		Assert.assertEquals(customerAddressFromDB.getPincode(),customerAddress.pincode());
+
+		int productId = createJobResponseModel.getData().getTr_customer_product_id();
+		CustomerProductDBModel customerProductDBData= CustomerProductDao.getProductInfoFromDB(productId);
+		Assert.assertEquals(customerProductDBData.getImei1(), customerProduct.imei1());
+		Assert.assertEquals(customerProductDBData.getImei2(), customerProduct.imei2());
+		Assert.assertEquals(customerProductDBData.getSerial_number(), customerProduct.serial_number());
+		Assert.assertEquals(customerProductDBData.getDop(), customerProduct.dop());
+		Assert.assertEquals(customerProductDBData.getPopurl(), customerProduct.popurl());
+		Assert.assertEquals(customerProductDBData.getMst_model_id(), customerProduct.mst_model_id());
+
+		
+	}
+
+}
