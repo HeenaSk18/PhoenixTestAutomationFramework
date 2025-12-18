@@ -3,6 +3,7 @@ package com.database.dao;
 import java.sql.SQLException;
 
 import com.database.model.CustomerAddressDBModel;
+import com.database.model.JobHeadModel;
 
 public class DemoDaoRunner {
 
@@ -16,8 +17,11 @@ public class DemoDaoRunner {
 //	Assert.assertEquals(customerDBData.getFirst_name(), customer.first_name());
 //	
 	
-	CustomerAddressDBModel customerAddressDBModel=	CustomerAddressDao.getCustomerAddressData(113460);
-		System.out.println(customerAddressDBModel);
-	}
+//	CustomerAddressDBModel customerAddressDBModel=	CustomerAddressDao.getCustomerAddressData(113460);
+//		System.out.println(customerAddressDBModel);
+//	
+		JobHeadModel jobHeadModel=	JobHeadDao.getDataFromJobHead(131909);
+		System.out.println(jobHeadModel);
+		}
 
 }
