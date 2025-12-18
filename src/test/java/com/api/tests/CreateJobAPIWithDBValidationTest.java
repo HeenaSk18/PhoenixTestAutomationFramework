@@ -31,16 +31,19 @@ import com.api.request.model.Problems;
 import com.database.dao.CustomerAddressDao;
 import com.database.dao.CustomerDao;
 import com.database.dao.CustomerProductDao;
+import com.database.dao.JobHeadDao;
+import com.database.dao.MapJobProblemDao;
 import com.database.model.CustomerAddressDBModel;
 import com.database.model.CustomerDBModel;
 import com.database.model.CustomerProductDBModel;
+import com.database.model.JobHeadModel;
+import com.database.model.MapJobProblemModel;
 
 import io.restassured.response.Response;
-import io.restassured.response.Validatable;
-import io.restassured.response.ValidatableResponse;
 
 public class CreateJobAPIWithDBValidationTest {
 //Creating the CreateJobPayload Object
+	
 	private Customer customer;
 	private CreateJobPayload createjobpayload;
 	private CustomerAddress customerAddress;
@@ -114,6 +117,20 @@ public class CreateJobAPIWithDBValidationTest {
 		Assert.assertEquals(customerAddressFromDB.getCountry(),customerAddress.country());
 		Assert.assertEquals(customerAddressFromDB.getPincode(),customerAddress.pincode());
 
+	
+		JobHeadModel jobHeadDataFromDB=	JobHeadDao.getDataFromJobHead(customerId);
+		Assert.assertEquals(jobHeadDataFromDB.getMst_oem_id(), createjobpayload.mst_oem_id());
+		Assert.assertEquals(jobHeadDataFromDB.getMst_service_location_id(), createjobpayload.mst_service_location_id());
+		Assert.assertEquals(jobHeadDataFromDB.getMst_warrenty_status_id(), createjobpayload.mst_warrenty_status_id());
+		Assert.assertEquals(jobHeadDataFromDB.getMst_platform_id(), createjobpayload.mst_platform_id());
+
+		
+		
+		int tr_job_head_id= response.then().extract().body().jsonPath().getInt("data.id");
+		MapJobProblemModel jobDataFromDB = MapJobProblemDao.getProblemDetails(tr_job_head_id);
+		Assert.assertEquals(jobDataFromDB.getMst_problem_id(), createjobpayload.problems().get(0).id());
+		Assert.assertEquals(jobDataFromDB.getRemark(), createjobpayload.problems().get(0).remark());
+	
 		int productId = response.then().extract().body().jsonPath().getInt("data.tr_customer_product_id");
 		CustomerProductDBModel customerProductDBData= CustomerProductDao.getProductInfoFromDB(productId);
 		Assert.assertEquals(customerProductDBData.getImei1(), customerProduct.imei1());
