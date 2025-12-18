@@ -12,6 +12,7 @@
 			<class name="com.api.tests.LoginAPIExcelDataDrivenTest" />
 			<class name="com.api.tests.CreateJobAPIExcelDataDrivenTest" />
 			<class name="com.api.tests.CreateJobAPIDBDataDrivenTest" />
+			<class name="com.api.tests.CreateJobAPIWithDBValidationWithResponseModelTest" />
 
 		</classes>
 	</test>
