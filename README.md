@@ -1,4 +1,3 @@
-
 # Phoenix Test Automation Framework
 ![Java](https://img.shields.io/badge/Java-16+-orange)
 ![Maven](https://img.shields.io/badge/Build-Maven-blue)
